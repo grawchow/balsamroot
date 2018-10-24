@@ -1,0 +1,220 @@
+\NeedsTeXFormat{LaTeX2e}%[2015/01/01] % fixed via latexrelease package, see below
+\ProvidesPackage{cmzine}[2017/06/15 v0.1 Options for a kickass experience]
+
+\areaset[current]{275pt}{350pt}
+\setlength{\marginparwidth}{0em}
+\setlength{\marginparsep}{0em}
+\setlength{\footskip}{20pt}
+\setlength{\oddsidemargin}{-52pt}
+\setlength{\evensidemargin}{-60pt}
+\setlength{\topmargin}{-60pt}
+
+% change name of ToC
+    \renewcommand{\contentsname}{Geranium}
+
+% Create asterism
+    \RequirePackage{stackengine}
+    \RequirePackage{lipsum}
+    \RequirePackage{graphicx}
+    
+    \newcommand{\asterism}{{\par\vspace{1em}{\centering\scalebox{1.5}{\stackon[-0.5pt]{\bfseries*~*}{\bfseries*}}\par}\vspace{.5em}\par}}
+    
+% Create thoughtbreak
+    \newcommand{\thoughtbreak}{\vspace{0.5em}{\centering $\diamond \hspace{0.7cm} \diamond \hspace{0.7cm} \diamond$ \vspace{.5em} \par \noindent}}
+	
+% Justify 	
+    \newcommand*\justify{%
+      \fontdimen2\font=0.4em% interword space
+      \fontdimen3\font=0.2em% interword stretch
+      \fontdimen4\font=0.1em% interword shrink
+      \fontdimen7\font=0.1em% extra space
+      \hyphenchar\font=`\-% allowing hyphenation
+    }
+    
+% Create a letter environment
+\newlength{\siglength}
+\newenvironment{letter}
+    {
+        \vspace{0.5em}
+        \begin{adjustwidth}{2em}{2em}
+        \setlength{\siglength}{0.5\linewidth}
+        \itshape
+        \noindent
+        \ignorespaces
+    }
+    {
+        \end{adjustwidth}
+        \par
+        \vspace{0.5em}
+        \noindent
+        \ignorespacesafterend
+    }
+    
+% Set color for title page background
+    \definecolor{titlepagecolor}{RGB}{107, 178, 122}
+    \definecolor{calligraColor}{gray}{0.9}
+    \definecolor{geraniumTitleColor}{RGB}{220, 237, 222}
+    
+% Set fonts for title page
+    \newcommand{\titleCalligra}[1]{\color{white}\fontsize{300}{40} \usefont{T1}{calligra}{m}{n} \noindent #1}
+    
+    \newcommand{\UNbwtitle}{\color{calligraColor}\fontsize{150}{40} \usefont{T1}{calligra}{m}{n} \noindent}
+
+    \newcommand{\titleCaps}[1]{\color{black}\fontsize{60}{40} \usefont{T1}{pbk}{m}{n} \spacedallcaps{#1}}
+
+    \newcommand{\offont}[1]{\centering\color{black}\fontsize{30}{40} \usefont{T1}{calligra}{m}{n} #1}
+
+    \newcommand{\titleAuthor}[1]{\color{black}\fontsize{40}{40}\usefont{T1}{pbk}{m}{n}\scshape #1} %antt
+    
+    \newcommand{\titleDate}[1]{\color{black}\fontsize{20}{40} \usefont{T1}{pbk}{m}{n} \spacedallcaps{#1}}
+    
+% Set inside title fonts
+
+    \newcommand{\inTitleCalligra}[1]{\color{calligraColor}\fontsize{150}{40} \usefont{T1}{calligra}{m}{n} \noindent #1}
+    
+    \newcommand{\inTitleCaps}[1]{\color{gray} \fontsize{35}{40} \usefont{T1}{pbk}{m}{n}\spacedallcaps{#1}}
+
+    \newcommand{\inTitleAuthor}[1]{\color{black}\fontsize{30}{40}\usefont{T1}{pbk}{m}{n}\scshape #1}
+    
+    \newcommand{\inTitleDate}[1]{\color{gray}\fontsize{16}{40} \usefont{T1}{pbk}{m}{n} \spacedallcaps{#1}}
+    
+% Create album descriptions
+    \newcommand{\albumBreakDiamond}{\vspace{0.5em}{\centering $\diamond \hspace{0.7cm} \diamond \hspace{0.7cm} \diamond$ \vspace{.5em} \par}\noindent\ignorespaces}
+    \newcommand{\albumBreak}{\vspace{2ex}\par\noindent\ignorespaces}
+    \RequirePackage{etoolbox}
+    \newbool{notFirstAlbum}
+    \newbool{albumRight}
+    \setlength{\fboxsep}{0pt}
+    \newcommand{\album}[4]{
+        \ifbool{notFirstAlbum}{\albumBreak}{} % Create album breaks.
+        \ifbool{albumRight}{ % Show image on right.
+        \begin{minipage}[t][][t]{\textwidth}
+            \begin{wrapfigure}[6]{r}{0.25\textwidth}\centering\vspace{-1.1em}\fbox{\includegraphics[width=0.24\textwidth]{#1}}\end{wrapfigure}
+            \spacedlowsmallcaps{#2}
+            \texttt{\^}
+            \textit{#3}:
+            #4
+        \end{minipage}
+        \boolfalse{albumRight}
+        }
+        { % Show image on left.
+        \begin{minipage}[t][][t]{\textwidth}
+            \begin{wrapfigure}[6]{l}{0.25\textwidth}\centering\vspace{-1.1em}\fbox{\includegraphics[width=0.24\textwidth]{#1}}\end{wrapfigure}
+            \spacedlowsmallcaps{#2}
+            \texttt{\^}
+            \textit{#3}:
+            #4
+        \end{minipage}
+        \booltrue{albumRight}
+        }
+        \booltrue{notFirstAlbum}
+        \par\noindent\ignorespaces
+    }
+    
+    % \newcommand{\album}[2]{
+    %     \ifbool{notFirstAlbum}{\albumBreak}{}
+    %     \ifbool{albumRight}{
+    %         \parbox{0.7\textwidth}{#2}
+    %         \hfill
+    %         \parbox{0.3\textwidth}{
+    %             \centering
+    %             \includegraphics[width=0.25\textwidth]{#1}
+    %         }
+    %         \boolfalse{albumRight}
+    %         }
+    %     {
+    %         \parbox[][][t]{0.3\textwidth}{
+    %             \centering
+    %             \includegraphics[width=0.25\textwidth]{#1}
+    %         }
+    %         \hfill
+    %         \parbox{0.7\textwidth}{
+    %             #2
+    %         }
+    %         \booltrue{albumRight}
+    %     }
+    %     % \ifbool{notFirstAlbum}{}{#2}
+    %     \booltrue{notFirstAlbum}
+    % }
+    
+    
+% Remove chapter numbers from ToC
+    \RequirePackage{tocloft}
+    \setcounter{secnumdepth}{-1}% Set ToC depth for numbering. -1 is the lowest this goes.
+    \setlength{\cftchapindent}{1em}% Set indent for chapter titles
+
+
+% Create section signatures
+    \newcommand{\initials}[2]{
+        \mbox{
+        \color{halfgray}
+        \texttt{\^}
+        \hspace{-0.8em}
+        \spacedlowsmallcaps{#1}
+        \hspace{-0.8em}
+        \spacedlowsmallcaps{#2}
+        \color{black}
+        }
+    }
+    
+% Create book titles.
+    \newcommand{\book}[2]{
+        \spacedlowsmallcaps{#1}
+        \texttt{\^}
+        \textit{#2}:
+        \hspace{-0.8em}
+    }
+
+% Create recipe steps
+    \newcommand{\recipeBreak}{\vspace{2ex}\par\noindent\ignorespaces}
+    \RequirePackage{etoolbox}
+    \newcounter{recipeStep}
+    \setcounter{recipeStep}{1}
+    \newbool{notFirstStep}
+    \newbool{recipeRight}
+    \setlength{\fboxsep}{0pt}
+    \newcommand{\recipeStep}[2]{
+        \ifbool{notFirstStep}{\recipeBreak}{} % Create album breaks.
+        \ifbool{recipeRight}{ % Show image on right.
+        \begin{minipage}[t][][t]{0.9\textwidth}
+            \begin{wrapfigure}[6]{l}{0.22\textwidth}\centering\vspace{-1.1em}\includegraphics[width=0.22\textwidth]{#1}\end{wrapfigure}
+            \spacedlowsmallcaps{Step \therecipeStep}:
+            #2
+        \end{minipage}
+        \boolfalse{recipeRight}
+        }
+        { % Show image on left.
+        \noindent
+        \hspace{1em}
+        \begin{minipage}[t][][t]{0.9\textwidth}
+            \begin{wrapfigure}[6]{r}{0.22\textwidth}\centering\vspace{-1.1em}\includegraphics[width=0.22\textwidth]{#1}\end{wrapfigure}
+            \spacedlowsmallcaps{Step \therecipeStep}:
+            #2
+        \end{minipage}
+        \booltrue{recipeRight}
+        }
+        \booltrue{notFirstStep}
+        \stepcounter{recipeStep}
+        \par\noindent\ignorespaces
+    }
+    \newcommand{\recipeStep*}[2]{
+        \ifbool{notFirstStep}{\recipeBreak}{} % Create album breaks.
+        \ifbool{recipeRight}{ % Show image on right.
+        \begin{minipage}[t][][t]{0.9\textwidth}
+            \begin{wrapfigure}[6]{l}{0.22\textwidth}\centering\vspace{-1.1em}\includegraphics[width=0.22\textwidth]{#1}\end{wrapfigure}
+            #2
+        \end{minipage}
+        \boolfalse{recipeRight}
+        }
+        { % Show image on left.
+        \noindent
+        \hspace{1em}
+        \begin{minipage}[t][][t]{0.9\textwidth}
+            \begin{wrapfigure}[6]{r}{0.22\textwidth}\centering\vspace{-1.1em}\includegraphics[width=0.22\textwidth]{#1}\end{wrapfigure}
+            #2
+        \end{minipage}
+        \booltrue{recipeRight}
+        }
+        \booltrue{notFirstStep}
+        \par\noindent\ignorespaces
+    }
